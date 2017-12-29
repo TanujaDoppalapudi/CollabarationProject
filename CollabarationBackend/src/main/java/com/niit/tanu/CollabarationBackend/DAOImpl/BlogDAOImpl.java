@@ -1,10 +1,9 @@
 package com.niit.tanu.CollabarationBackend.DAOImpl;
 
-
-
 import java.util.List;
-import org.hibernate.Query;
+
 import org.hibernate.SessionFactory;
+import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +11,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.niit.tanu.CollabarationBackend.DAO.BlogDAO;
-import com.niit.tanu.CollabarationBackend.Model.BlogModel;
-import com.niit.tanu.CollabarationBackend.Model.UserPart;
-
-
+import com.niit.tanu.CollabarationBackend.DAO.*;
+import com.niit.tanu.CollabarationBackend.Model.*;
 
 @SuppressWarnings("deprecation")
 @Repository("blogDAO")
 @EnableTransactionManagement
-public class BlogDAOImpl implements BlogDAO 
+public class BlogDAOImpl implements BlogDAO
 {
 private static final Logger log = LoggerFactory.getLogger(BlogDAOImpl.class);
 	
@@ -41,102 +37,197 @@ private static final Logger log = LoggerFactory.getLogger(BlogDAOImpl.class);
 			ex.printStackTrace();
 		}
 	}
+	
 	@Transactional
-	public boolean addBlog(BlogModel blogModel) {
-		log.info("Add Blog Method Started");
+	public boolean addBlog(Blog blog)
+	{
+		log.info("Add blog started");
 		try
 		{
-			sessionFactory.getCurrentSession().saveOrUpdate(blogModel);
-			log.info("Add blog Method Success");
+			blog.setStatus("Submitted");
+			sessionFactory.getCurrentSession().saveOrUpdate(blog);
+			log.info("Add Blog Success");
 			return true;
-		}
-		catch(Exception ex)
+		} catch(Exception ex)
 		{
-			log.error("Add blog has an Error");
-			ex.printStackTrace();
+			log.error("Error adding Blog");
 			return false;
 		}
 	}
+	
 	@Transactional
-	public boolean updateBlog(BlogModel blogModel) {
-		log.info("Update Blog method Started");
+	public boolean updateBlog(Blog blog)
+	{
+		log.info("Update Blog by user Started");
+		Blog saveBlog = blog;
+		{
+			String title = saveBlog.getBlog_title();
+			String hql_string = "FROM Blog WHERE blog_title = '"+title+"'";
+			@SuppressWarnings("rawtypes")
+			Query query = sessionFactory.getCurrentSession().createQuery(hql_string);
+			blog = (Blog) query.uniqueResult();
+			sessionFactory.getCurrentSession().delete(blog);
+			log.info("Processing Requests");
+		}
+		
 		try
 		{
-			log.info("Update blog Success");
-			sessionFactory.getCurrentSession().update(blogModel);
+			saveBlog.setStatus("Updated");
+			sessionFactory.getCurrentSession().save(saveBlog);
+			log.info("Blog update Success");
 			return true;
-		}
-		catch(Exception ex)
+		} catch(Exception ex)
 		{
-			log.info("Update Blog Unsuccessful");
 			ex.printStackTrace();
+			log.error("Error adding Blog");
 			return false;
 		}
 	}
+	
 	@Transactional
-	public boolean deleteBlog(BlogModel blogModel) {
-		log.info("Delete Blog method Started");
+	public boolean approveBlog(Blog blog) 
+	{
+		log.info("Approve Blog by Admin - Started");
+		Blog saveBlog = blog;
+		{
+			String title = saveBlog.getBlog_title();
+			String hql_string = "FROM Blog WHERE blog_title = '"+title+"'";
+			@SuppressWarnings("rawtypes")
+			Query query = sessionFactory.getCurrentSession().createQuery(hql_string);
+			blog = (Blog) query.uniqueResult();
+			sessionFactory.getCurrentSession().delete(blog);
+			log.info("Processing Request");
+		}
+		
 		try
 		{
-			log.info("Delete blog Success");
-			sessionFactory.getCurrentSession().delete(blogModel);
+			sessionFactory.getCurrentSession().save(saveBlog);
+			log.info("Blog updated Success");
 			return true;
-		}
-		catch(Exception ex)
+		} catch(Exception ex)
 		{
-			log.info("Delete Blog Unsuccessful");
 			ex.printStackTrace();
+			log.error("Error adding Blog");
 			return false;
 		}
 	}
+
 	@Transactional
-	public BlogModel getBlog(String title) {
-		log.debug("Starting of Method Get Blog "+title);
+	public boolean deleteBlog(Blog blog) 
+	{
+		log.info("Delete Blog method initiated");
 		try
 		{
-			BlogModel blogPart =  sessionFactory.getCurrentSession().get(BlogModel.class, title);
-			blogPart.setErrorCode("200");
-			blogPart.setErrorMsg("User Found");
-			return blogPart;
-		}
-		catch(Exception ex)
+			sessionFactory.getCurrentSession().delete(blog);
+			log.info("Delete Blog success");
+			return true;
+		} catch(Exception ex)
 		{
-			UserPart userPart = new UserPart();
+			log.error("Error adding Blog");
+			return false;
+		}
+	}
+
+	@Transactional
+	public Blog getBlog(String title) 
+	{
+		log.info("Get Blog method started");
+		try
+		{
+			String hql_string = "FROM Blog WHERE blog_title = '"+title+"'";
+			@SuppressWarnings("rawtypes")
+			Query query = sessionFactory.getCurrentSession().createQuery(hql_string);
+			log.info("Blog Retrieved");
+			return (Blog) query.uniqueResult();
+		} catch(Exception ex)
+		{
+			log.error("Error Getting Blog");
 			ex.printStackTrace();
-			userPart.setErrorCode("404");
-			userPart.setErrorMsg("User Not Found");
 			return null;
 		}
 	}
-	@Transactional
-	public List<BlogModel> getBlogByUser(String username) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Transactional
-	public List<BlogModel> getAllBlogs() {
-		log.info("Starting of List Method");
-		String hql_string = "FROM Blog";
-		Query query = sessionFactory.getCurrentSession().createQuery(hql_string);
-		log.info("List Retrieved");
-		return query.list();
-	}
-	/**public boolean addBlog(BlogModel blogPart) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	public boolean updateBlog(BlogModel blogPart) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	public boolean deleteBlog(BlogModel blogPart) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	public BlogModel getBlog(String title) {
-		// TODO Auto-generated method stub
-		return null;
-	}**/
 	
-
+	@Transactional
+	public List<Blog> getBlogByUser(String username) 
+	{
+		log.info("Blog List by User started");
+		try
+		{
+			String hql_string = "FROM Blog WHERE username = '"+username+"'";
+			@SuppressWarnings("rawtypes")
+			Query query = sessionFactory.getCurrentSession().createQuery(hql_string);
+			@SuppressWarnings("unchecked")
+			List<Blog> list = query.list();
+			if (list != null && !list.isEmpty()) 
+			{
+				log.info("Blog List Retrieved");
+				return list;
+			}
+			log.warn("Blog List Mostly Empty");
+			return null;
+		} 
+		catch(Exception ex)
+		{
+			log.error("Error Getting Blog List");
+			ex.printStackTrace();
+			return null;
+		}
 	}
+	
+	@Transactional
+	public List<Blog> getAllBlogs() 
+	{
+		log.info("Get All Blog List Started");
+		try
+		{
+			String hql_string = "FROM Blog";
+			@SuppressWarnings("rawtypes")
+			Query query = sessionFactory.getCurrentSession().createQuery(hql_string);
+			@SuppressWarnings("unchecked")
+			List<Blog> list = query.list();
+			if (list != null && !list.isEmpty()) 
+			{
+				log.info("Blog List Retrieved");
+				return list;
+			}
+			log.warn("Blog List must be empty.");
+			return null;
+		} 
+		catch(Exception ex)
+		{
+			log.error("Error Getting Blog List");
+			ex.printStackTrace();
+			return null;
+		}
+	}
+
+	@Transactional
+	public List<Blog> getApprovedBlogs() 
+	{
+		log.info("Approved Blogs List");
+		try
+		{
+			String hql_string = "FROM Blog WHERE status = 'Approved'";
+			@SuppressWarnings("rawtypes")
+			Query query = sessionFactory.getCurrentSession().createQuery(hql_string);
+			@SuppressWarnings("unchecked")
+			List<Blog> list = query.list();
+			if (list != null && !list.isEmpty()) 
+			{
+				log.info("Blog List Retrieved");
+				return list;
+			}
+			else
+			{
+				log.warn("Blog List maybe Empty");
+				return null;
+			}
+		} 
+		catch(Exception ex)
+		{
+			log.error("Error Getting Blog List");
+			ex.printStackTrace();
+			return null;
+		}
+	}	
+}

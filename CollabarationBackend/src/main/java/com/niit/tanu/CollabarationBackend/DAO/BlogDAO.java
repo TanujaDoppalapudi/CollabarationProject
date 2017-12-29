@@ -1,16 +1,26 @@
 package com.niit.tanu.CollabarationBackend.DAO;
 
-
-
 import java.util.List;
+
 import com.niit.tanu.CollabarationBackend.Model.*;
+
 public interface BlogDAO 
 {
-	public boolean addBlog(BlogModel blogPart);
-	public boolean updateBlog(BlogModel blogPart);	
-	public boolean deleteBlog(BlogModel blogPart);
-	public BlogModel getBlog(String title);
-	public List<BlogModel> getBlogByUser(String username);
-	public List<BlogModel> getAllBlogs();
+	public boolean addBlog(Blog blog);
+	
+	// to approve A blog by ADMIN only.
+	public boolean approveBlog(Blog blog);
+	
+	public boolean updateBlog(Blog blog);	
+	
+	public boolean deleteBlog(Blog blog);
+	
+	public Blog getBlog(String title);
+	
+	public List<Blog> getBlogByUser(String username);
+	
+	public List<Blog> getApprovedBlogs();
+	
+	public List<Blog> getAllBlogs();
 
 }

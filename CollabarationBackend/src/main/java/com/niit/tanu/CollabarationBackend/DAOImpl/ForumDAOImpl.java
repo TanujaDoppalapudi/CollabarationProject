@@ -2,7 +2,10 @@ package com.niit.tanu.CollabarationBackend.DAOImpl;
 
 
 
+
+
 import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -12,20 +15,17 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.niit.tanu.CollabarationBackend.DAO.ForumDAO;
-import com.niit.tanu.CollabarationBackend.Model.ForumPart;
-import com.niit.tanu.CollabarationBackend.Model.UserPart;
-
-
+import com.niit.tanu.CollabarationBackend.DAO.*;
+import com.niit.tanu.CollabarationBackend.Model.*;
 
 
 
 @SuppressWarnings("deprecation")
 @Repository("forumDAO")
 @EnableTransactionManagement
-public class ForumDAOImpl implements ForumDAO 
+public class ForumDAOImpl implements ForumDAO
 {
-private static final Logger log = LoggerFactory.getLogger(ForumDAOImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(ForumDAOImpl.class);
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -43,113 +43,166 @@ private static final Logger log = LoggerFactory.getLogger(ForumDAOImpl.class);
 			ex.printStackTrace();
 		}
 	}
+	
+	private Integer getMaxId()
+	{
+		log.info("->->Starting of the method getMaxId");
+
+		String hql = "select max(id) from Forum";
+		@SuppressWarnings("rawtypes")
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		Integer maxID;
+		try 
+		{
+			maxID = (Integer) query.uniqueResult();
+			if(maxID==null)
+			{
+				maxID = 10000;
+			}
+		} catch (Exception e) 
+		{
+			log.error("Error getting Max ID");
+			e.printStackTrace();
+			return 10;
+		}
+		log.info("Max id :" + maxID);
+		return maxID;
+	}
+	
 	@Transactional
-	public boolean addForum(ForumPart forumPart) {
-		log.info("Add Blog Method Started");
+	public boolean addForum(Forum forum) 
+	{
+		log.info("Entering add forum");
 		try
 		{
-			sessionFactory.getCurrentSession().saveOrUpdate(forumPart);
-			log.info("Add forum Method Success");
+			forum.setId(getMaxId()+1);
+			forum.setStatus('P');
+			sessionFactory.getCurrentSession().save(forum);
+			log.info("Forum has been added "+forum.getForum_id());
 			return true;
+		} catch (Exception ex)
+		{
+			log.error("Forum has not been saved");
+			ex.printStackTrace();
+		}
+			return false;
+	}
+	
+	@Transactional
+	public boolean updateForum(Forum forum)
+	{
+		log.info("Entering Update Forum");
+		try
+		{
+			sessionFactory.getCurrentSession().update(forum);
+			log.info("Forum has been updated "+forum.getForum_id());
+			return true;
+		} catch (Exception ex)
+		{
+			log.error("Forum has not been updated");
+			ex.printStackTrace();
+		}
+			return false;
+	}
+
+	@Transactional
+	public boolean deleteForum(int id) 
+	{
+		log.info("Entering delete forum");
+		try
+		{
+			Forum forum = getForum(id);
+			sessionFactory.getCurrentSession().delete(forum);
+			log.info("Forum has been deleted");
+			return true;
+		} catch (Exception ex)
+		{
+			log.error("Forum has not been deleted ");
+			ex.printStackTrace();
+		}
+			return false;
+	}
+
+	@Transactional
+	public Forum getForum(int id) 
+	{
+		log.debug("Starting of Method Get Forum");
+		try
+		{
+			Forum forum =  (Forum) sessionFactory.getCurrentSession().get(Forum.class, id);
+			forum.setErrorCode("200");
+			forum.setErrorMsg("Forum Found");
+			log.info("Forum found");
+			return forum;
 		}
 		catch(Exception ex)
 		{
-			log.error("Add forum has an Error");
+			log.error("Error getting forum");
+			Forum forum = new Forum();
 			ex.printStackTrace();
-			return false;
+			forum.setErrorCode("404");
+			forum.setErrorMsg("Forum Not Found");
+			return forum;
 		}
 	}
+
+	@SuppressWarnings({ "unchecked" })
 	@Transactional
-	public boolean updateBlog(ForumPart forumPart) {
-		log.info("Update forum method Started");
+	public List<Forum> getForumList() 
+	{
+		log.info("Starting of List Forum method");
 		try
 		{
-			log.info("Update forum Success");
-			sessionFactory.getCurrentSession().update(forumPart);
-			return true;
-		}
-		catch(Exception ex)
+			String sql = "FROM Forum";
+			@SuppressWarnings("rawtypes")
+			Query query = sessionFactory.getCurrentSession().createQuery(sql);
+			log.info("Forum list has been retrieved");
+			return query.list();
+		}	catch(Exception ex)
 		{
-			log.info("Update forum Unsuccessful");
+			log.error("Error retrieving Forum List");
 			ex.printStackTrace();
-			return false;
-		}
-	}
-	@Transactional
-	public boolean deleteForum(ForumPart forumPart) {
-		log.info("Delete forum method Started");
-		try
-		{
-			log.info("Delete forum Success");
-			sessionFactory.getCurrentSession().delete(forumPart);
-			return true;
-		}
-		catch(Exception ex)
-		{
-			log.info("Delete forum Unsuccessful");
-			ex.printStackTrace();
-			return false;
-		}
-	}
-	@Transactional
-	public ForumPart getForum(String title) {
-		log.debug("Starting of Method Get forum "+title);
-		try
-		{
-			ForumPart forumPart =  sessionFactory.getCurrentSession().get(ForumPart.class, title);
-			forumPart.setErrorCode("200");
-			forumPart.setErrorMsg("User Found");
-			return forumPart;
-		}
-		catch(Exception ex)
-		{
-			UserPart userPart = new UserPart();
-			ex.printStackTrace();
-			userPart.setErrorCode("404");
-			userPart.setErrorMsg("User Not Found");
 			return null;
 		}
 	}
-	@Transactional
-	public List<ForumPart> getForumByUser(String username) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Transactional
-	public List<ForumPart> getAllForums() {
-		log.info("Starting of List Method");
-		String hql_string = "FROM FORUM";
-		Query query = sessionFactory.getCurrentSession().createQuery(hql_string);
-		log.info("List Retrieved");
-		return query.list();
-	}
-	/**@Override
-	public boolean updateForum(ForumPart forumPart) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	public boolean addForum(ForumPart forumPart) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	public boolean updateForum(ForumPart forumPart) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	public boolean deleteForum(ForumPart forumPart) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	public ForumPart getForum(String title) {
-		// TODO Auto-generated method stub
-		return null;
-	}**/
-	public boolean updateForum(ForumPart forumPart) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
-	
-
+	@SuppressWarnings({ "unchecked" })
+	@Transactional
+	public List<Forum> approvedForums() 
+	{
+		log.info("Starting of List Forum method");
+		try
+		{
+			String sql = "FROM Forum where status = 'A'";
+			@SuppressWarnings("rawtypes")
+			Query query = sessionFactory.getCurrentSession().createQuery(sql);
+			log.info("Forum list has been retrieved");
+			return query.list();
+		}	catch(Exception ex)
+		{
+			log.error("Error retrieving Forum List");
+			ex.printStackTrace();
+			return null;
+		}
 	}
 
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<Forum> getUserForums(String username) 
+	{
+		log.info("Starting of List Forum by user");
+		try
+		{
+			String sql = "FROM Forum where username = '"+username+"'";
+			@SuppressWarnings("rawtypes")
+			Query query = sessionFactory.getCurrentSession().createQuery(sql);
+			log.info("Forum list has been retrieved");
+			return query.list();
+		}	catch(Exception ex)
+		{
+			log.error("Error retrieving Forum List");
+			ex.printStackTrace();
+			return null;
+		}
+	}
+}
