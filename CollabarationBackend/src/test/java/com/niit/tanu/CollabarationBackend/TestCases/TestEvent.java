@@ -28,7 +28,7 @@ public class TestEvent
 	public TestEvent()
 	{	
 		context = new AnnotationConfigApplicationContext();
-		context.scan("com.niit");
+		context.scan("com.niit.tanu");
 		context.refresh();
 
 		eventDAO = (EventDAO) context.getBean("eventDAO");

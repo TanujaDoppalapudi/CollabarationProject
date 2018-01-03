@@ -30,7 +30,7 @@ public class TestUser
 	{
 		
 		context = new AnnotationConfigApplicationContext();
-		context.scan("com.niit");
+		context.scan("com.niit.tanu");
 		context.refresh();
 
 		userDAO = (UserDAO) context.getBean("userDAO");
@@ -42,14 +42,14 @@ public class TestUser
 	{
 		log.info("Add User Test started");
 		
-		user.setUsername("srinu");
-		user.setFirst_name("srinu");
+		user.setUsername("Tanu");
+		user.setFirst_name("Tanu");
 		user.setLast_name("");
 		user.setDob(new Date());
-		user.setGender('M');
-		user.setMail_id("srinu@gmail.com");
-		user.setPassword("srinu");
-		user.setStatus('N');
+		user.setGender('F');
+		user.setMail_id("tanu@gmail.com");
+		user.setPassword("tanu");
+		user.setStatus('Y');
 		user.setRole("ADMIN");
 		
 		userDAO.addUser(user);
@@ -59,7 +59,7 @@ public class TestUser
 	public void getUserDetails()
 	{
 		log.info("Get User Details Started");
-		String userName = "SRINU";
+		String userName = "TANU";
 		user = userDAO.getUser(userName);
 		System.out.println("Name - "+user.getFirst_name());
 		System.out.println("Date - "+user.getDob());
@@ -107,10 +107,10 @@ public class TestUser
 	{
 		TestUser tuser = new TestUser();
 		tuser.testAdd();
-//		tuser.getUserDetails();
+	//tuser.getUserDetails();
 //		tuser.validateUser();
 //		tuser.deleteUser();
-		//tuser.list();
+//		tuser.list();
 		
 		System.out.println("Success");
 	}

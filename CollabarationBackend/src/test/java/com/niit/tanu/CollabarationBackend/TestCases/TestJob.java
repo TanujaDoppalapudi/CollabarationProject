@@ -27,7 +27,7 @@ public class TestJob
 	public TestJob()
 	{	
 		context = new AnnotationConfigApplicationContext();
-		context.scan("com.niit");
+		context.scan("com.niit.tanu");
 		context.refresh();
 
 		jobDAO = (JobDAO) context.getBean("jobDAO");
