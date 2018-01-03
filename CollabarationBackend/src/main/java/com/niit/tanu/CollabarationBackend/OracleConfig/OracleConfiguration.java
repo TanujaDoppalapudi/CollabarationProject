@@ -42,8 +42,8 @@ public class OracleConfiguration
 			DriverManagerDataSource dataSource = new DriverManagerDataSource();
 			dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
 			dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:XE");
-			dataSource.setUsername("system");
-			dataSource.setPassword("tanujatanu");
+			dataSource.setUsername("tanu");
+			dataSource.setPassword("tanu");
 			
 			return dataSource;
 		}
@@ -68,8 +68,8 @@ public class OracleConfiguration
 			sessionBuilder.addProperties(getHibernateProperties());
 			sessionBuilder.addAnnotatedClass(User.class);
 			sessionBuilder.addAnnotatedClass(Blog.class);
-			sessionBuilder.addAnnotatedClass(Job.class);
-			sessionBuilder.addAnnotatedClass(JobApplied.class);
+		//	sessionBuilder.addAnnotatedClass(Job.class);
+		//	sessionBuilder.addAnnotatedClass(JobApplied.class);
 			sessionBuilder.addAnnotatedClass(Event.class);
 			sessionBuilder.addAnnotatedClass(BlogComment.class);
 			sessionBuilder.addAnnotatedClass(Forum.class);

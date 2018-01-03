@@ -28,7 +28,7 @@ public class TestEvent
 	public TestEvent()
 	{	
 		context = new AnnotationConfigApplicationContext();
-		context.scan("com.niit.collaboration");
+		context.scan("com.niit");
 		context.refresh();
 
 		eventDAO = (EventDAO) context.getBean("eventDAO");
@@ -97,7 +97,7 @@ public class TestEvent
 	public static void main(String[] args) 
 	{
 		TestEvent test = new TestEvent();
-//		test.add();
+		test.add();
 //		test.delete();
 //		test.getEvent();
 		test.listEvent();

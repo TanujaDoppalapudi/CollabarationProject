@@ -30,7 +30,7 @@ public class TestUser
 	{
 		
 		context = new AnnotationConfigApplicationContext();
-		context.scan("com.niit.collaboration");
+		context.scan("com.niit");
 		context.refresh();
 
 		userDAO = (UserDAO) context.getBean("userDAO");

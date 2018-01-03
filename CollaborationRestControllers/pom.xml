@@ -20,10 +20,11 @@
 
 		<!-- Dependency of BackEnd in Controllers -->
 		<dependency>
-   
-   <groupId>com.niit.tanu</groupId>
+    <groupId>com.niit.tanu</groupId>
   <artifactId>CollabarationBackend</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  
+  
    </dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
@@ -39,6 +40,14 @@
 			<artifactId>spring-context</artifactId>
 			<version>4.3.7.RELEASE</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>4.3.7.RELEASE</version>
+		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
 		<dependency>
@@ -110,14 +119,8 @@
 			<version>2.5</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.0-api -->
-<dependency>
-    <groupId>org.hibernate.javax.persistence</groupId>
-    <artifactId>hibernate-jpa-2.0-api</artifactId>
-    <version>1.0.1.Final</version>
-</dependency>
-		
-    
+	
+
     
    </dependencies>
    
