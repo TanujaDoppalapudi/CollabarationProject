@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class Blog extends BaseDomain
 {
 	@Id
-	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int blog_id;
 	private String blog_title;
 	@Lob

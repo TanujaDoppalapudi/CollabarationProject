@@ -42,14 +42,14 @@ public class TestUser
 	{
 		log.info("Add User Test started");
 		
-		user.setUsername("srinu");
-		user.setFirst_name("srinu");
+		user.setUsername("tanu");
+		user.setFirst_name("tanu");
 		user.setLast_name("");
 		user.setDob(new Date());
-		user.setGender('M');
-		user.setMail_id("srinu@gmail.com");
-		user.setPassword("srinu");
-		user.setStatus('N');
+		user.setGender('F');
+		user.setMail_id("tanu@gmail.com");
+		user.setPassword("tanu");
+		user.setStatus('Y');
 		user.setRole("ADMIN");
 		
 		userDAO.addUser(user);
