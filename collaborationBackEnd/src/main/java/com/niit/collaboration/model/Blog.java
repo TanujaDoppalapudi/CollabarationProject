@@ -15,7 +15,7 @@ public class Blog extends BaseDomain
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int blog_id;
+	private long blog_id;
 	private String blog_title;
 	@Lob
 	private String description;
@@ -25,11 +25,11 @@ public class Blog extends BaseDomain
 	@Lob
 	private String rejected;
 	
-	public int getBlog_id() {
+	public long getBlog_id() {
 		return blog_id;
 	}
 
-	public void setBlog_id(int blog_id) {
+	public void setBlog_id(long blog_id) {
 		this.blog_id = blog_id;
 	}
 

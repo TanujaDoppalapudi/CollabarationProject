@@ -1,7 +1,7 @@
 app.factory('BlogService', function($http, $q, $rootScope)
 {
 	console.log("Entering BlogService")
-	var BASE_URL = "http://localhost:8090/collaborationControllers/"
+	var BASE_URL = "http://localhost:8091/collaborationControllers/"
 		return{
 		
 	listBlog: function()

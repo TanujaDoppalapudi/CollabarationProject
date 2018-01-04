@@ -1,7 +1,7 @@
 app.factory('AdminService', function($http, $q, $rootScope)
 {
 	console.log("Admin Service")
-	var BASE_URL = "http://localhost:8090/collaborationControllers/"
+	var BASE_URL = "http://localhost:8091/collaborationControllers/"
 	return {
 
 		listAllForums: function()

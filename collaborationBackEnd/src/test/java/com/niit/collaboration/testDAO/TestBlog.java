@@ -37,7 +37,7 @@ Logger log = LoggerFactory.getLogger(TestUser.class);
 	{
 		blog.setBlog_title("N th Blog");
 		blog.setDescription("Hello");
-		blog.setUsername("testdone");
+		blog.setUsername("tanu");
 		blog.setDate_time("DATE_TIME");
 		blogDAO.addBlog(blog);
 		System.out.println("Success?");
@@ -149,8 +149,8 @@ Logger log = LoggerFactory.getLogger(TestUser.class);
 	public static void main(String[] args) 
 	{
 		TestBlog tb = new TestBlog();
-	//tb.addBlog();
-		tb.getAll();
+	tb.addBlog();
+	//	tb.getAll();
 //		tb.approveBlog();
 //		tb.updateBlog();	
 	//	tb.getBlog();

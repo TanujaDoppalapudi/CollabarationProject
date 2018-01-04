@@ -37,7 +37,7 @@ public class TestJob
 	public void addJob()
 	{
 		job.setTitle("My Third Job");
-		job.setUsername("manasa1234");
+		job.setUsername("tanu");
 		job.setStatus('Y');
 		job.setPosition("Developers");
 		job.setCompany("Infotech");
@@ -93,8 +93,8 @@ public class TestJob
 	public static void main(String[] args) 
 	{
 		TestJob tj = new TestJob();
-//		tj.addJob();
-		tj.listJob();
+		tj.addJob();
+//		tj.listJob();
 //		tj.deleteJob();
 //		tj.inValidate();
 //		tj.getJob();

@@ -107,7 +107,7 @@ public class TestUser
 	{
 		TestUser tuser = new TestUser();
 		tuser.testAdd();
-//		tuser.getUserDetails();
+	//tuser.getUserDetails();
 //		tuser.validateUser();
 //		tuser.deleteUser();
 		//tuser.list();
